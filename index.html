@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mahjong Duel — 2P</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <h1>Mahjong Duel — 2P</h1>
+      <div class="status">
+        <span id="connStatus">Disconnected</span>
+        <span id="roleLabel" class="pill"></span>
+        <button id="btnNewGame" class="primary">New Game</button>
+      </div>
+    </header>
+
+    <section class="connect">
+      <details open>
+        <summary>Connect</summary>
+        <div class="connect-grid">
+          <div class="card">
+            <h3>Nearby (QR / Manual)</h3>
+            <p>Works offline on the same Wi‑Fi. One creates an Offer QR, the other scans and returns an Answer.</p>
+            <div class="row">
+              <button id="btnCreateOffer" class="primary">Create Offer</button>
+              <button id="btnScanOffer">Scan Offer</button>
+            </div>
+            <textarea id="offerText" placeholder="Offer SDP/code will appear here…" readonly></textarea>
+            <div class="row">
+              <button id="btnScanAnswer">Scan Answer</button>
+              <button id="btnPasteAnswer">Paste Answer</button>
+            </div>
+            <textarea id="answerText" placeholder="Paste or generate answer here…"></textarea>
+            <canvas id="qrCanvas" width="256" height="256" class="qr"></canvas>
+            <video id="cam" autoplay playsinline></video>
+          </div>
+          <div class="card">
+            <h3>Remote (Firebase)</h3>
+            <p>Easy connect over the internet (free tier). Fill <code>config.js</code> with your Firebase keys.</p>
+            <div class="row">
+              <input id="roomId" placeholder="Room ID, e.g. abcd-1234" />
+              <button id="btnHostRoom" class="primary">Host</button>
+              <button id="btnJoinRoom">Join</button>
+            </div>
+            <p class="muted">No personal data stored. Uses Realtime Database for signaling only.</p>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section class="table">
+      <div class="left">
+        <div class="card">
+          <h3>Table</h3>
+          <div id="tableState" class="table-state">
+            <div class="wall">
+              <span>Wall: <b id="wallCount">0</b></span>
+              <span>Discards (You): <b id="yourDiscardsCount">0</b></span>
+              <span>Discards (Opponent): <b id="oppDiscardsCount">0</b></span>
+            </div>
+            <div class="melds">
+              <div>
+                <h4>Your Melds</h4>
+                <div id="yourMelds" class="meld-row"></div>
+              </div>
+              <div>
+                <h4>Opponent Melds</h4>
+                <div id="oppMelds" class="meld-row"></div>
+              </div>
+            </div>
+            <div class="discards">
+              <div>
+                <h4>Your Discards</h4>
+                <div id="yourDiscards" class="discard-row"></div>
+              </div>
+              <div>
+                <h4>Opponent Discards</h4>
+                <div id="oppDiscards" class="discard-row"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Actions</h3>
+          <div class="row">
+            <button id="btnDraw" disabled>Draw</button>
+            <button id="btnDiscard" disabled>Discard</button>
+            <button id="btnClaimPung" disabled>Pung</button>
+            <button id="btnClaimChow" disabled>Chow</button>
+            <button id="btnKong" disabled>Kong</button>
+            <button id="btnMahjong" disabled class="accent">Mahjong!</button>
+            <button id="btnPass" disabled>Pass</button>
+          </div>
+          <div class="row">
+            <label><input type="checkbox" id="chkHints" /> Hints</label>
+            <label><input type="checkbox" id="chkSpeed" /> Speed Mode (10 min)</label>
+            <button id="btnPowerTile">Set Power Tile</button>
+            <span id="powerTileLabel" class="muted"></span>
+          </div>
+          <div id="turnLabel" class="turn"></div>
+          <div id="timer" class="timer"></div>
+        </div>
+      </div>
+
+      <div class="right">
+        <div class="card">
+          <h3>Your Hand</h3>
+          <div id="yourHand" class="hand"></div>
+        </div>
+        <div class="card">
+          <h3>Opponent Hand</h3>
+          <div id="oppHand" class="hand shadowed"></div>
+        </div>
+        <div class="card">
+          <h3>Log</h3>
+          <div id="log" class="log"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>Mahjong Duel — 2P • WebRTC + Firebase signaling • Netlify-ready</p>
+      <a href="https://mahjongwiki.alwaysdata.net/Rules" target="_blank" rel="noreferrer">Mahjong basics</a>
+    </footer>
+  </div>
+
+  <script src="./config.js"></script>
+  <script src="./libs/qrcode.js"></script>
+  <script src="./libs/jsqr.js"></script>
+  <script type="module" src="./src/app.js"></script>
+</body>
+</html>
